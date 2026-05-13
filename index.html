@@ -198,6 +198,146 @@
       background: rgba(255, 140, 0, 0.2);
       color: #ffaa40;
     }
+
+    /* ─── RESPONSIVE DESIGN ─── */
+    .hamburger-icon {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: .35rem;
+    }
+
+    .hamburger-icon span {
+      width: 24px;
+      height: 2.5px;
+      background: #00d4ff;
+      border-radius: 2px;
+      transition: all .3s;
+    }
+
+    #menu-toggle {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      /* 平板以下屏幕調整 */
+      nav {
+        padding: 0 1rem;
+        height: 50px;
+        gap: 0.8rem;
+      }
+
+      .nav-logo {
+        font-size: .9rem;
+      }
+
+      .hamburger-icon {
+        display: flex;
+      }
+
+      /* 隱藏所有導航按鈕，通過 checkbox 控制顯示 */
+      .nav-menu {
+        position: fixed;
+        top: 50px;
+        left: 0;
+        right: 0;
+        background: rgba(10, 14, 26, 0.98);
+        border-bottom: 1px solid rgba(0, 180, 255, 0.15);
+        display: flex;
+        flex-direction: column;
+        padding: 0.5rem 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height .3s ease;
+        z-index: 99;
+      }
+
+      #menu-toggle:checked ~ .nav-menu {
+        max-height: 400px;
+      }
+
+      .nav-btn {
+        font-size: .8rem;
+        padding: .5rem 1.2rem;
+        width: 100%;
+        text-align: left;
+        border: none;
+        background: transparent;
+        border-bottom: 1px solid rgba(0, 180, 255, 0.1);
+        border-radius: 0;
+        transition: all .2s;
+      }
+
+      .nav-btn:hover,
+      .nav-btn.active {
+        background: rgba(0, 180, 255, 0.12);
+        border-color: rgba(0, 180, 255, 0.3);
+      }
+
+      #dl-btn {
+        margin-left: 0 !important;
+      }
+
+      /* 平板菜單圖標轉動 */
+      #menu-toggle:checked ~ .hamburger-icon span:nth-child(1) {
+        transform: rotate(45deg) translate(8px, 8px);
+      }
+
+      #menu-toggle:checked ~ .hamburger-icon span:nth-child(2) {
+        opacity: 0;
+      }
+
+      #menu-toggle:checked ~ .hamburger-icon span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      /* 手機屏幕調整 */
+      nav {
+        padding: 0 0.8rem;
+        height: 48px;
+      }
+
+      .nav-logo {
+        font-size: .75rem;
+      }
+
+      .nav-btn {
+        font-size: .75rem;
+        padding: .4rem 1rem;
+      }
+
+      .tooltip {
+        font-size: .75rem;
+        max-width: 200px;
+      }
+
+      .back-btn {
+        font-size: .75rem;
+        padding: .3rem .8rem;
+      }
+
+      .mindmap-header {
+        padding: 0.8rem 1rem;
+      }
+
+      .mindmap-header h2 {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 1024px) and (min-width: 769px) {
+      /* 大平板調整 */
+      nav {
+        padding: 0 1.5rem;
+      }
+
+      .nav-btn {
+        font-size: .8rem;
+        padding: .3rem .7rem;
+      }
+    }
   </style>
 </head>
 
@@ -205,12 +345,20 @@
 
   <nav>
     <span class="nav-logo">⚡ 電商防護盾 Roadmap</span>
-    <button class="nav-btn active" onclick="showPage('roadmap',this)">🗺 課程地圖</button>
-    <button class="nav-btn" onclick="showPage('m02',this)">暖身模組</button>
-    <button class="nav-btn" onclick="showPage('m03',this)">店舖模組</button>
-    <button class="nav-btn" onclick="showPage('m031',this)">虛擬產品</button>
-    <button class="nav-btn" id="dl-btn" onclick="downloadHTML()"
-      style="margin-left:auto;background:rgba(0,180,255,0.12);border-color:#00b4ff;color:#00d4ff;">⬇ 下載 HTML</button>
+    <input type="checkbox" id="menu-toggle">
+    <div class="hamburger-icon" onclick="document.getElementById('menu-toggle').click()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="nav-menu">
+      <button class="nav-btn active" onclick="showPage('roadmap',this);closeMobileMenu()">🗺 課程地圖</button>
+      <button class="nav-btn" onclick="showPage('m02',this);closeMobileMenu()">暖身模組</button>
+      <button class="nav-btn" onclick="showPage('m03',this);closeMobileMenu()">店舖模組</button>
+      <button class="nav-btn" onclick="showPage('m031',this);closeMobileMenu()">虛擬產品</button>
+      <button class="nav-btn" id="dl-btn" onclick="downloadHTML();closeMobileMenu()"
+        style="background:rgba(0,180,255,0.12);border-color:#00b4ff;color:#00d4ff;">⬇ 下載 HTML</button>
+    </div>
   </nav>
 
   <div class="tooltip" id="tooltip"></div>
@@ -393,6 +541,13 @@
     }
 
     // ════════════════════════════════════════
+    //  MOBILE MENU CONTROL
+    // ════════════════════════════════════════
+    function closeMobileMenu() {
+      document.getElementById('menu-toggle').checked = false;
+    }
+
+    // ════════════════════════════════════════
     //  TOOLTIP
     // ════════════════════════════════════════
     var tip = document.getElementById('tooltip');
@@ -446,18 +601,41 @@
       var totalLessons = courseData.modules.reduce((sum, mod) => sum + mod.lessons.length, 0);
       var angleStep = (2 * Math.PI) / totalLessons;
 
-      // 調降半徑係數以預留邊界空間
-      var moduleRadius = baseDim * 0.16;
-      var lessonRadius = baseDim * 0.40;
+      // 根據屏幕寬度自適應調整半徑與字體
+      var screenSize = W < 480 ? 'mobile' : W < 768 ? 'tablet' : 'desktop';
+      var moduleRadius, lessonRadius, centerRadius, moduleTextSize, lessonNumSize, lessonLabelSize;
+      
+      if (screenSize === 'mobile') {
+        moduleRadius = baseDim * 0.08;
+        lessonRadius = baseDim * 0.22;
+        centerRadius = 35;
+        moduleTextSize = '0.6rem';
+        lessonNumSize = '0.5rem';
+        lessonLabelSize = '0.5rem';
+      } else if (screenSize === 'tablet') {
+        moduleRadius = baseDim * 0.12;
+        lessonRadius = baseDim * 0.30;
+        centerRadius = 45;
+        moduleTextSize = '0.7rem';
+        lessonNumSize = '0.6rem';
+        lessonLabelSize = '0.55rem';
+      } else {
+        moduleRadius = baseDim * 0.16;
+        lessonRadius = baseDim * 0.40;
+        centerRadius = 55;
+        moduleTextSize = '1rem';
+        lessonNumSize = '0.65rem';
+        lessonLabelSize = '0.6rem';
+      }
 
       // Center Node
       var centerG = mainG.append('g');
-      centerG.append('circle').attr('cx', cx).attr('cy', cy).attr('r', 55)
+      centerG.append('circle').attr('cx', cx).attr('cy', cy).attr('r', centerRadius)
         .attr('fill', '#001428').attr('stroke', '#00b4ff').attr('stroke-width', 2).attr('filter', 'url(#glow-blue)');
       centerG.append('text').attr('x', cx).attr('y', cy - 8).attr('text-anchor', 'middle')
-        .attr('fill', '#00d4ff').attr('font-size', '1rem').attr('font-weight', '700').text('電商防護盾');
+        .attr('fill', '#00d4ff').attr('font-size', moduleTextSize).attr('font-weight', '700').text('電商防護盾');
       centerG.append('text').attr('x', cx).attr('y', cy + 12).attr('text-anchor', 'middle')
-        .attr('fill', '#80c0e0').attr('font-size', '.75rem').text('課程 Roadmap');
+        .attr('fill', '#80c0e0').attr('font-size', '.7rem').text('課程 Roadmap');
 
       var currentLessonIndex = 0;
 
@@ -473,6 +651,7 @@
         mainG.append('line').attr('x1', cx).attr('y1', cy).attr('x2', mx).attr('y2', my)
           .attr('stroke', mod.color).attr('stroke-width', 2).attr('stroke-dasharray', '6,4').attr('opacity', .6);
 
+        var moduleNodeRadius = screenSize === 'mobile' ? 25 : screenSize === 'tablet' ? 32 : 40;
         var mg = mainG.append('g').attr('class', 'module-node').attr('cursor', 'pointer')
           .on('click', function () {
             var btnEl = document.querySelector('.nav-btn[onclick*="' + mod.page + '"]');
@@ -484,13 +663,13 @@
           })
           .on('mousemove', moveTip).on('mouseout', hideTip);
 
-        mg.append('circle').attr('cx', mx).attr('cy', my).attr('r', 40)
+        mg.append('circle').attr('cx', mx).attr('cy', my).attr('r', moduleNodeRadius)
           .attr('fill', mod.dark).attr('stroke', mod.color).attr('stroke-width', 2.5)
           .attr('filter', 'url(#glow-' + (i === 0 ? 'green' : i === 1 ? 'red' : 'purple') + ')');
         mg.append('text').attr('x', mx).attr('y', my - 6).attr('text-anchor', 'middle')
-          .attr('fill', mod.color).attr('font-size', '.8rem').attr('font-weight', '700').text(mod.title);
+          .attr('fill', mod.color).attr('font-size', moduleTextSize).attr('font-weight', '700').text(mod.title);
         mg.append('text').attr('x', mx).attr('y', my + 10).attr('text-anchor', 'middle')
-          .attr('fill', '#a0c8e0').attr('font-size', '.65rem').text(mod.subtitle.substring(0, 10));
+          .attr('fill', '#a0c8e0').attr('font-size', '.6rem').text(mod.subtitle.substring(0, 10));
 
         mod.lessons.forEach(function (lesson, j) {
           var angle = (currentLessonIndex * angleStep) - Math.PI / 2;
@@ -500,6 +679,7 @@
           mainG.append('line').attr('x1', mx).attr('y1', my).attr('x2', lx).attr('y2', ly)
             .attr('stroke', mod.color).attr('stroke-width', 1).attr('opacity', .4);
 
+          var lessonNodeRadius = screenSize === 'mobile' ? 10 : screenSize === 'tablet' ? 14 : 18;
           var nodeColor = mod.color;
           var lg = mainG.append('g').attr('class', 'lesson-node').attr('cursor', 'pointer')
             .on('click', function () {
@@ -513,15 +693,15 @@
             })
             .on('mousemove', moveTip).on('mouseout', hideTip);
 
-          lg.append('circle').attr('cx', lx).attr('cy', ly).attr('r', 18)
+          lg.append('circle').attr('cx', lx).attr('cy', ly).attr('r', lessonNodeRadius)
             .attr('fill', 'rgba(10,14,26,0.9)').attr('stroke', nodeColor).attr('stroke-width', 1.5);
           lg.append('text').attr('x', lx).attr('y', ly - 2).attr('text-anchor', 'middle')
-            .attr('fill', nodeColor).attr('font-size', '.65rem').attr('font-weight', '700').text(lesson.num);
+            .attr('fill', nodeColor).attr('font-size', lessonNumSize).attr('font-weight', '700').text(lesson.num);
 
           // Multi-line Adaptive Label
-          var maxChars = 5;
-          var lineHeight = 15;
-          var labelRadius = lessonRadius + 60;
+          var maxChars = screenSize === 'mobile' ? 3 : 5;
+          var lineHeight = screenSize === 'mobile' ? 12 : 15;
+          var labelRadius = lessonRadius + (screenSize === 'mobile' ? 30 : 60);
           var tx = cx + labelRadius * Math.cos(angle);
           var ty = cy + labelRadius * Math.sin(angle);
 
@@ -532,7 +712,7 @@
 
           var textNode = lg.append('text')
             .attr('x', tx).attr('y', ty - (lines.length - 1) * (lineHeight / 2))
-            .attr('text-anchor', 'middle').attr('fill', '#a0c0d8').attr('font-size', '.6rem')
+            .attr('text-anchor', 'middle').attr('fill', '#a0c0d8').attr('font-size', lessonLabelSize)
             .attr('style', 'pointer-events: none;');
 
           lines.forEach(function (line, li) {
@@ -557,6 +737,7 @@
       var container = document.getElementById('page-' + mod.page).querySelector('.mindmap-svg-wrap');
       var W = container.offsetWidth || 900;
       var H = container.offsetHeight || 600;
+      var screenSize = W < 480 ? 'mobile' : W < 768 ? 'tablet' : 'desktop';
 
       if (mindmapBuilt[mod.id]) {
         // Just highlight if needed
@@ -588,8 +769,13 @@
       g.append('text').attr('x', cx).attr('y', cy + 10).attr('text-anchor', 'middle')
         .attr('fill', '#80b8d0').attr('font-size', '.7rem').text(mod.subtitle.substring(0, 8));
 
-      // Arrange lessons in a circle
-      var radius = Math.min(W, H) * 0.33;
+      // Arrange lessons in a circle - adaptive radius
+      var radiusMult = screenSize === 'mobile' ? 0.20 : screenSize === 'tablet' ? 0.27 : 0.33;
+      var radius = Math.min(W, H) * radiusMult;
+      var lessonNodeRadius = screenSize === 'mobile' ? 30 : screenSize === 'tablet' ? 40 : 50;
+      var lessonNodeFontSize = screenSize === 'mobile' ? '.6rem' : screenSize === 'tablet' ? '.68rem' : '.75rem';
+      var lessonTitleSize = screenSize === 'mobile' ? '.5rem' : screenSize === 'tablet' ? '.56rem' : '.62rem';
+      
       mod.lessons.forEach(function (lesson, i) {
         var angle = (i / numLessons) * 2 * Math.PI - Math.PI / 2;
         var lx = cx + radius * Math.cos(angle);
@@ -609,23 +795,24 @@
           })
           .on('mousemove', moveTip).on('mouseout', hideTip);
 
-        ng.append('circle').attr('cx', lx).attr('cy', ly).attr('r', 50)
+        ng.append('circle').attr('cx', lx).attr('cy', ly).attr('r', lessonNodeRadius)
           .attr('fill', 'rgba(5,10,22,0.9)').attr('stroke', nodeColor).attr('stroke-width', 2)
           .attr('id', 'circle-' + lesson.id);
 
         // Type icon
         var icon = lesson.type === 'video' ? '▶' : lesson.type === 'maint' ? '🔧' : '📄';
         ng.append('text').attr('x', lx).attr('y', ly - 8).attr('text-anchor', 'middle')
-          .attr('font-size', '.75rem').attr('fill', nodeColor).text(lesson.num + ' ' + icon);
+          .attr('font-size', lessonNodeFontSize).attr('fill', nodeColor).text(lesson.num + ' ' + icon);
 
-        // Wrap title
+        // Wrap title - adjust char per line based on screen size
+        var charsPerLine = screenSize === 'mobile' ? 4 : 6;
         var words = lesson.title.split('');
-        var line1 = words.slice(0, 6).join('');
-        var line2 = words.slice(6, 12).join('');
+        var line1 = words.slice(0, charsPerLine).join('');
+        var line2 = words.slice(charsPerLine, charsPerLine * 2).join('');
         ng.append('text').attr('x', lx).attr('y', ly + 6).attr('text-anchor', 'middle')
-          .attr('fill', '#d0e8f8').attr('font-size', '.62rem').text(line1);
+          .attr('fill', '#d0e8f8').attr('font-size', lessonTitleSize).text(line1);
         if (line2) ng.append('text').attr('x', lx).attr('y', ly + 17).attr('text-anchor', 'middle')
-          .attr('fill', '#d0e8f8').attr('font-size', '.62rem').text(line2);
+          .attr('fill', '#d0e8f8').attr('font-size', lessonTitleSize).text(line2);
       });
 
       if (highlightId) highlightLesson(mod.id, highlightId);
@@ -639,25 +826,32 @@
       if (openDetail === lesson.id) { openDetail = null; return; }
       openDetail = lesson.id;
 
-      var dg = g.append('g').attr('class', 'detail-group');
-      var bw = 220, bh = lesson.points.length * 22 + 50;
-      var bx = lx + 35, by = ly - bh / 2;
+      var screenSize = document.querySelector('.mindmap-svg-wrap').offsetWidth < 480 ? 'mobile' : 
+                       document.querySelector('.mindmap-svg-wrap').offsetWidth < 768 ? 'tablet' : 'desktop';
+      var bw = screenSize === 'mobile' ? 140 : screenSize === 'tablet' ? 180 : 220;
+      var bh = lesson.points.length * (screenSize === 'mobile' ? 18 : 22) + 40;
+      var bx = lx + (screenSize === 'mobile' ? 20 : 35);
+      var by = ly - bh / 2;
+      var fontSize = screenSize === 'mobile' ? '.6rem' : screenSize === 'tablet' ? '.7rem' : '.8rem';
+      var pointSize = screenSize === 'mobile' ? '.55rem' : screenSize === 'tablet' ? '.62rem' : '.68rem';
+      var linkSize = screenSize === 'mobile' ? '.5rem' : screenSize === 'tablet' ? '.6rem' : '.65rem';
 
+      var dg = g.append('g').attr('class', 'detail-group');
       dg.append('rect').attr('x', bx).attr('y', by).attr('width', bw).attr('height', bh)
         .attr('rx', 8).attr('fill', 'rgba(5,10,30,0.95)').attr('stroke', nodeColor).attr('stroke-width', 1.5);
-      dg.append('text').attr('x', bx + 12).attr('y', by + 20)
-        .attr('fill', nodeColor).attr('font-size', '.8rem').attr('font-weight', '700')
-        .text(lesson.num + ' ' + lesson.title.substring(0, 14));
+      dg.append('text').attr('x', bx + 8).attr('y', by + 16)
+        .attr('fill', nodeColor).attr('font-size', fontSize).attr('font-weight', '700')
+        .text(lesson.num + ' ' + lesson.title.substring(0, screenSize === 'mobile' ? 10 : 14));
 
       lesson.points.forEach(function (pt, pi) {
-        dg.append('text').attr('x', bx + 14).attr('y', by + 40 + pi * 22)
-          .attr('fill', '#c0daf0').attr('font-size', '.68rem').text('• ' + pt.substring(0, 22));
+        dg.append('text').attr('x', bx + 8).attr('y', by + 32 + pi * (screenSize === 'mobile' ? 18 : 22))
+          .attr('fill', '#c0daf0').attr('font-size', pointSize).text('• ' + pt.substring(0, screenSize === 'mobile' ? 14 : 22));
       });
 
       if (lesson.url) {
-        dg.append('text').attr('x', bx + 12).attr('y', by + bh - 8)
-          .attr('fill', '#40b8ff').attr('font-size', '.65rem').attr('cursor', 'pointer')
-          .text('→ 前往課程頁面')
+        dg.append('text').attr('x', bx + 8).attr('y', by + bh - 6)
+          .attr('fill', '#40b8ff').attr('font-size', linkSize).attr('cursor', 'pointer')
+          .text('→ 前往課程')
           .on('click', function () { window.open(lesson.url, '_blank'); });
       }
     }
