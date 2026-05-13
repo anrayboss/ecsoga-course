@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>電商防護盾 – 課程 Roadmap</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+      background: #0a0e1a;
+      color: #e0e6f0;
+      min-height: 100vh;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(10, 14, 26, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 180, 255, 0.15);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      height: 56px;
+      gap: 1.5rem;
+    }
+
+    .nav-logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #00b4ff;
+      letter-spacing: .05em;
+      margin-right: auto;
+    }
+
+    .nav-btn {
+      background: none;
+      border: 1px solid rgba(0, 180, 255, 0.35);
+      color: #a0c8e8;
+      padding: .35rem .9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: .85rem;
+      transition: all .2s;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      background: rgba(0, 180, 255, 0.15);
+      color: #00d4ff;
+      border-color: #00b4ff;
+    }
+
+    /* ─── PAGES ─── */
+    .page {
+      display: none;
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+    }
+
+    .page.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── ROADMAP PAGE ─── */
+    #page-roadmap {
+      background: radial-gradient(ellipse at 20% 30%, #0d1f3c 0%, #0a0e1a 60%);
+    }
+
+    #page-roadmap svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .module-node circle {
+      cursor: pointer;
+      transition: r .2s, filter .2s;
+    }
+
+    .module-node:hover circle {
+      filter: brightness(1.3);
+    }
+
+    .lesson-node circle {
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .lesson-node:hover circle {
+      filter: brightness(1.4);
+    }
+
+    .node-label {
+      pointer-events: none;
+      font-family: 'Microsoft JhengHei', sans-serif;
+    }
+
+    .link-line {
+      stroke-opacity: 0.45;
+    }
+
+    /* ─── MINDMAP PAGES ─── */
+    .mindmap-page {
+      background: #050810;
+    }
+
+    .mindmap-header {
+      padding: 1.2rem 2rem;
+      border-bottom: 1px solid rgba(0, 180, 255, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .mindmap-header h2 {
+      font-size: 1.25rem;
+      color: #00d4ff;
+      flex: 1;
+    }
+
+    .back-btn {
+      background: rgba(0, 180, 255, 0.1);
+      border: 1px solid rgba(0, 180, 255, 0.3);
+      color: #80c8e8;
+      padding: .4rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: .85rem;
+    }
+
+    .back-btn:hover {
+      background: rgba(0, 180, 255, 0.2);
+      color: #00d4ff;
+    }
+
+    .mindmap-svg-wrap {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .mindmap-svg-wrap svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ─── TOOLTIP ─── */
+    .tooltip {
+      position: fixed;
+      background: rgba(5, 12, 30, 0.95);
+      border: 1px solid rgba(0, 180, 255, 0.4);
+      border-radius: 8px;
+      padding: .7rem 1rem;
+      font-size: .82rem;
+      color: #c8e0f8;
+      max-width: 280px;
+      pointer-events: none;
+      z-index: 999;
+      display: none;
+      line-height: 1.6;
+    }
+
+    /* ─── MODULE CARDS (fallback overview) ─── */
+    .module-status {
+      font-size: .7rem;
+      padding: .15rem .4rem;
+      border-radius: 4px;
+      margin-left: .5rem;
+    }
+
+    .status-video {
+      background: rgba(0, 180, 255, 0.2);
+      color: #00b4ff;
+    }
+
+    .status-text {
+      background: rgba(80, 220, 120, 0.2);
+      color: #50dc78;
+    }
+
+    .status-maint {
+      background: rgba(255, 140, 0, 0.2);
+      color: #ffaa40;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <span class="nav-logo">⚡ 電商防護盾 Roadmap</span>
+    <button class="nav-btn active" onclick="showPage('roadmap',this)">🗺 課程地圖</button>
+    <button class="nav-btn" onclick="showPage('m02',this)">暖身模組</button>
+    <button class="nav-btn" onclick="showPage('m03',this)">店舖模組</button>
+    <button class="nav-btn" onclick="showPage('m031',this)">虛擬產品</button>
+    <button class="nav-btn" id="dl-btn" onclick="downloadHTML()"
+      style="margin-left:auto;background:rgba(0,180,255,0.12);border-color:#00b4ff;color:#00d4ff;">⬇ 下載 HTML</button>
+  </nav>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <!-- ROADMAP PAGE -->
+  <div class="page active" id="page-roadmap">
+    <svg id="roadmap-svg"></svg>
+  </div>
+
+  <!-- M02 MINDMAP -->
+  <div class="page" id="page-m02">
+    <div class="mindmap-header">
+      <button class="back-btn" onclick="showPage('roadmap',null)">← 返回地圖</button>
+      <h2>02 課程暖身 — 電商基礎建立</h2>
+    </div>
+    <div class="mindmap-svg-wrap"><svg id="m02-svg"></svg></div>
+  </div>
+
+  <!-- M03 MINDMAP -->
+  <div class="page" id="page-m03">
+    <div class="mindmap-header">
+      <button class="back-btn" onclick="showPage('roadmap',null)">← 返回地圖</button>
+      <h2>03 電商店舖各別做法</h2>
+    </div>
+    <div class="mindmap-svg-wrap"><svg id="m03-svg"></svg></div>
+  </div>
+
+  <!-- M031 MINDMAP (虛擬產品) -->
+  <div class="page" id="page-m031">
+    <div class="mindmap-header">
+      <button class="back-btn" onclick="showPage('roadmap',null)">← 返回地圖</button>
+      <h2>如何靠虛擬產品做電商</h2>
+    </div>
+    <div class="mindmap-svg-wrap"><svg id="m031-svg"></svg></div>
+  </div>
+
+  <script>
+    // ════════════════════════════════════════
+    //  DATA
+    // ════════════════════════════════════════
+    var courseData = {
+      modules: [
+        {
+          id: "m02",
+          title: "02 課程暖身",
+          subtitle: "電商基礎建立",
+          color: "#00c8a0",
+          dark: "#005840",
+          page: "m02",
+          lessons: [
+            {
+              id: "m02-01", num: "01", title: "自架平台與電商平台的差異", type: "video", url: "https://course.ecsoga.com/shield/m02/01-自架平台與電商平台的差異/",
+              points: ["比較自架平台與電商平台的優缺點", "可自由選擇官網出發方式", "自架平台：完全掌控品牌，需自帶流量", "電商平台：流量現成，但抽成高、規則多"]
+            },
+            {
+              id: "m02-02", num: "02", title: "沒有自己的產品怎麼辦", type: "text", url: "https://course.ecsoga.com/shield/m02/沒有自己的產品怎麼辦/",
+              points: ["微商/直銷：話術備齊，適合練手", "聯盟行銷：選品平台，需社群+SEO基礎", "1688進貨：批發價取得，蝦皮主流來源", "代理產品：展覽選品，需本金+最低叫貨量", "OEM：貼自有品牌，一次性交易、銀貨兩訖"]
+            },
+            {
+              id: "m02-03", num: "03", title: "市場建議指南", type: "maint", url: "",
+              points: ["如何切入適合自己投入的市場", "目前頁面維護中，請直接前往課程平台觀看"]
+            },
+            {
+              id: "m02-04", num: "04", title: "如何偷窺目標市場廣告", type: "maint", url: "",
+              points: ["使用工具分析市場、選擇爆款產品", "目前頁面維護中，請直接前往課程平台觀看"]
+            },
+            {
+              id: "m02-05", num: "05", title: "偷窺競品流量的方法", type: "maint", url: "",
+              points: ["使用網站分析工具找出競品流量來源", "分析競品受眾與流量管道", "目前頁面維護中，請直接前往課程平台觀看"]
+            },
+            {
+              id: "m02-06", num: "06", title: "三種產品定位", type: "video", url: "https://course.ecsoga.com/shield/m02/三種產品定位/",
+              points: ["3種產品定位完整佈局產品線", "測試選品流程初步認知", "引流款：吸引新客，薄利多銷", "主打款：核心產品，穩定獲利", "利潤款：高客單，深度服務"]
+            }
+          ]
+        },
+        {
+          id: "m03",
+          title: "03 電商店舖",
+          subtitle: "各別做法",
+          color: "#ff6b6b",
+          dark: "#7a1010",
+          page: "m03",
+          lessons: [
+            {
+              id: "m03-01", num: "01", title: "選品店定義", type: "video", url: "https://course.ecsoga.com/shield/m03/01-選品店定義/",
+              points: ["新手電商從選品店開始", "測試並找到適合受眾後再做延伸", "快速驗證市場反應", "低風險、低門檻的入門方式"]
+            },
+            {
+              id: "m03-02", num: "02", title: "選品管道與方法", type: "video", url: "https://course.ecsoga.com/shield/m03/02-2/",
+              points: ["三個選品管道：蝦皮趨勢/速賣通/1688", "如何選品、測品及銷售", "選品測試流程", "數據驅動選品決策"]
+            },
+            {
+              id: "m03-03", num: "03", title: "貨款支付與集運", type: "text", url: "https://course.ecsoga.com/shield/m03/03acs/",
+              points: ["無支付寶可用第三方代付（折扣碼：Zobk7ldw）", "集運：將貨品集中後配送到所在地區", "降低跨境物流成本", "合理規劃物流時程"]
+            },
+            {
+              id: "m03-04", num: "04", title: "如何做一件代發", type: "video", url: "https://course.ecsoga.com/shield/m03/04ac/",
+              points: ["顧客下單 → 直接轉單給廠商", "廠商出貨，你只負責行銷", "零庫存創業模式", "核心：找到可靠的代發廠商"]
+            },
+            {
+              id: "m03-05", num: "05", title: "歐美代發工具１", type: "text", url: "https://course.ecsoga.com/shield/m03/05aceq/",
+              points: ["工具可自動鋪貨、自動上架", "需搭配 Chrome 輔助插件", "歐美選品站資源", "AliDropship 建議使用自家主機"]
+            },
+            {
+              id: "m03-06", num: "06", title: "歐美代發工具２", type: "text", url: "https://course.ecsoga.com/shield/m03/06ace/",
+              points: ["另一款歐美市場自動鋪貨工具", "自動上架到電商平台", "擴展歐美市場的進階工具"]
+            },
+            {
+              id: "m03-07", num: "07", title: "品牌店定義", type: "video", url: "https://course.ecsoga.com/shield/m03/013-2/",
+              points: ["品牌店的定義及執行方法", "從選品店升級到品牌店", "建立自有品牌識別", "長期競爭力的核心"]
+            },
+            {
+              id: "m03-08", num: "08", title: "大型平台店做法", type: "video", url: "https://course.ecsoga.com/shield/m03/100-2/",
+              points: ["大型平台店定義及執行方法", "蝦皮/Shopee/Amazon等大平台", "利用平台流量快速起步", "平台規則與演算法優化"]
+            }
+          ]
+        },
+        {
+          id: "m031",
+          title: "虛擬產品",
+          subtitle: "如何靠虛擬產品做電商",
+          color: "#b06aff",
+          dark: "#3a1070",
+          page: "m031",
+          lessons: [
+            {
+              id: "v01", num: "01", title: "如何透過虛擬產品做電商", type: "video", url: "https://course.ecsoga.com/shield/03-1/01-2/",
+              points: ["虛擬產品：服務、課程、設計模板、電子書", "無形產品與有形產品本質相同", "低成本、高利潤的創業模式"]
+            },
+            {
+              id: "v02", num: "02", title: "虛擬產品四大類型", type: "video", url: "",
+              points: ["服務類：技能販賣、諮詢顧問", "課程類：線上教學、知識變現", "設計模板：Canva/PPT模板", "電子書：電子書籍、操作手冊"]
+            },
+            {
+              id: "v03", num: "03", title: "虛擬產品的優點", type: "video", url: "",
+              points: ["邊際成本趨近零（賣出1個或100個成本相同）", "不需庫存、不需物流", "隨時隨地銷售，被動收入", "產品可無限複製"]
+            },
+            {
+              id: "v05", num: "05", title: "定價策略", type: "video", url: "",
+              points: ["4個價格梯度佈局", "引流款：$0-$97（低門檻體驗）", "核心款：$197-$497（主要收入）", "VIP款：$997+（高端服務）", "加值款：週期性收費（會員制）"]
+            },
+            {
+              id: "v06", num: "06", title: "定價策略：流量款→利潤款", type: "video", url: "",
+              points: ["流量款吸客 → 核心產品轉化 → VIP升級", "漏斗式銷售模型", "提高客戶終身價值（LTV）", "後端利潤才是重點"]
+            },
+            {
+              id: "v07", num: "07", title: "如何開始製作自己的產品", type: "video", url: "",
+              points: ["先從自己擅長的領域出發", "最小可行產品（MVP）概念", "用免費內容驗證市場反應", "從小規模開始，持續優化"]
+            },
+            {
+              id: "v08", num: "08", title: "內容就可以這樣做", type: "video", url: "",
+              points: ["6單元課程結構設計", "引言 → 基礎 → 進階 → 實戰 → 案例 → 總結", "VIP完整版：加入1對1輔導", "用教學內容建立專家形象"]
+            },
+            {
+              id: "v09", num: "09", title: "無形產品與有型產品本質相同", type: "video", url: "",
+              points: ["選品、定價、行銷邏輯完全相通", "都需要：找受眾、解決痛點", "都需要：測試市場、優化產品", "心態轉變：把知識當商品經營"]
+            }
+          ]
+        }
+      ]
+    };
+
+    // ════════════════════════════════════════
+    //  PAGE SWITCHING
+    // ════════════════════════════════════════
+    function showPage(id, btn) {
+      document.querySelectorAll('.page').forEach(function (p) { p.classList.remove('active'); });
+      var targetPage = document.getElementById('page-' + id);
+      if (targetPage) targetPage.classList.add('active');
+
+      document.querySelectorAll('.nav-btn').forEach(function (b) { b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+
+      // 如果切換的是模組頁面，自動構建心智圖
+      var mod = courseData.modules.find(m => m.page === id);
+      if (mod) {
+        buildMindmap(mod);
+      }
+    }
+
+    // ════════════════════════════════════════
+    //  TOOLTIP
+    // ════════════════════════════════════════
+    var tip = document.getElementById('tooltip');
+    function showTip(evt, html) {
+      tip.innerHTML = html;
+      tip.style.display = 'block';
+      moveTip(evt);
+    }
+    function moveTip(evt) {
+      var x = evt.pageX + 14, y = evt.pageY - 10;
+      if (x + 290 > window.innerWidth) x = evt.pageX - 300;
+      tip.style.left = x + 'px'; tip.style.top = y + 'px';
+    }
+    function hideTip() { tip.style.display = 'none'; }
+
+    // ════════════════════════════════════════
+    //  ROADMAP (Adaptive & Zoomable)
+    // ════════════════════════════════════════
+    function buildRoadmap() {
+      var svg = d3.select('#roadmap-svg');
+      var containerEl = document.getElementById('page-roadmap');
+      var W = containerEl.offsetWidth;
+      var H = containerEl.offsetHeight;
+      svg.attr('viewBox', '0 0 ' + W + ' ' + H).selectAll('*').remove();
+
+      // Stars bg (Static background)
+      var stars = d3.range(120).map(function () { return { x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.5 + 0.3 }; });
+      svg.selectAll('circle.star').data(stars).enter().append('circle').attr('class', 'star')
+        .attr('cx', function (d) { return d.x; }).attr('cy', function (d) { return d.y; }).attr('r', function (d) { return d.r; })
+        .attr('fill', '#ffffff').attr('opacity', function () { return Math.random() * 0.5 + 0.1; });
+
+      // Main Container for Zoom
+      var mainG = svg.append('g').attr('class', 'main-g');
+      var zoom = d3.zoom().scaleExtent([0.4, 4]).on('zoom', (e) => mainG.attr('transform', e.transform));
+      svg.call(zoom);
+
+      var cx = W / 2, cy = H / 2;
+
+      // Defs (glow filters)
+      var defs = svg.append('defs');
+      ['blue', 'green', 'red', 'purple'].forEach(function (c) {
+        var f = defs.append('filter').attr('id', 'glow-' + c).attr('x', '-50%').attr('y', '-50%').attr('width', '200%').attr('height', '200%');
+        f.append('feGaussianBlur').attr('stdDeviation', '4').attr('result', 'coloredBlur');
+        var merge = f.append('feMerge');
+        merge.append('feMergeNode').attr('in', 'coloredBlur');
+        merge.append('feMergeNode').attr('in', 'SourceGraphic');
+      });
+
+      // Adaptive Radii Calculation
+      var baseDim = Math.min(W, H);
+      var totalLessons = courseData.modules.reduce((sum, mod) => sum + mod.lessons.length, 0);
+      var angleStep = (2 * Math.PI) / totalLessons;
+
+      // 調降半徑係數以預留邊界空間
+      var moduleRadius = baseDim * 0.16;
+      var lessonRadius = baseDim * 0.40;
+
+      // Center Node
+      var centerG = mainG.append('g');
+      centerG.append('circle').attr('cx', cx).attr('cy', cy).attr('r', 55)
+        .attr('fill', '#001428').attr('stroke', '#00b4ff').attr('stroke-width', 2).attr('filter', 'url(#glow-blue)');
+      centerG.append('text').attr('x', cx).attr('y', cy - 8).attr('text-anchor', 'middle')
+        .attr('fill', '#00d4ff').attr('font-size', '1rem').attr('font-weight', '700').text('電商防護盾');
+      centerG.append('text').attr('x', cx).attr('y', cy + 12).attr('text-anchor', 'middle')
+        .attr('fill', '#80c0e0').attr('font-size', '.75rem').text('課程 Roadmap');
+
+      var currentLessonIndex = 0;
+
+      courseData.modules.forEach(function (mod, i) {
+        var lessonCount = mod.lessons.length;
+        var startAngle = currentLessonIndex * angleStep - Math.PI / 2;
+        var endAngle = (currentLessonIndex + lessonCount - 1) * angleStep - Math.PI / 2;
+        var midAngle = (startAngle + endAngle) / 2;
+
+        var mx = cx + moduleRadius * Math.cos(midAngle);
+        var my = cy + moduleRadius * Math.sin(midAngle);
+
+        mainG.append('line').attr('x1', cx).attr('y1', cy).attr('x2', mx).attr('y2', my)
+          .attr('stroke', mod.color).attr('stroke-width', 2).attr('stroke-dasharray', '6,4').attr('opacity', .6);
+
+        var mg = mainG.append('g').attr('class', 'module-node').attr('cursor', 'pointer')
+          .on('click', function () {
+            var btnEl = document.querySelector('.nav-btn[onclick*="' + mod.page + '"]');
+            showPage(mod.page, btnEl);
+            buildMindmap(mod);
+          })
+          .on('mouseover', function (evt) {
+            showTip(evt, '<strong>' + mod.title + '</strong><br>' + mod.subtitle + '<br><em style="color:#60b0d8;font-size:.75rem">點擊進入心智圖 →</em>');
+          })
+          .on('mousemove', moveTip).on('mouseout', hideTip);
+
+        mg.append('circle').attr('cx', mx).attr('cy', my).attr('r', 40)
+          .attr('fill', mod.dark).attr('stroke', mod.color).attr('stroke-width', 2.5)
+          .attr('filter', 'url(#glow-' + (i === 0 ? 'green' : i === 1 ? 'red' : 'purple') + ')');
+        mg.append('text').attr('x', mx).attr('y', my - 6).attr('text-anchor', 'middle')
+          .attr('fill', mod.color).attr('font-size', '.8rem').attr('font-weight', '700').text(mod.title);
+        mg.append('text').attr('x', mx).attr('y', my + 10).attr('text-anchor', 'middle')
+          .attr('fill', '#a0c8e0').attr('font-size', '.65rem').text(mod.subtitle.substring(0, 10));
+
+        mod.lessons.forEach(function (lesson, j) {
+          var angle = (currentLessonIndex * angleStep) - Math.PI / 2;
+          var lx = cx + lessonRadius * Math.cos(angle);
+          var ly = cy + lessonRadius * Math.sin(angle);
+
+          mainG.append('line').attr('x1', mx).attr('y1', my).attr('x2', lx).attr('y2', ly)
+            .attr('stroke', mod.color).attr('stroke-width', 1).attr('opacity', .4);
+
+          var nodeColor = mod.color;
+          var lg = mainG.append('g').attr('class', 'lesson-node').attr('cursor', 'pointer')
+            .on('click', function () {
+              var btnEl = document.querySelector('.nav-btn[onclick*="' + mod.page + '"]');
+              showPage(mod.page, btnEl);
+              buildMindmap(mod, lesson.id);
+            })
+            .on('mouseover', function (evt) {
+              var pts = lesson.points.slice(0, 3).map(function (p) { return '• ' + p; }).join('<br>');
+              showTip(evt, '<strong>' + lesson.num + ' ' + lesson.title + '</strong><br>' + pts);
+            })
+            .on('mousemove', moveTip).on('mouseout', hideTip);
+
+          lg.append('circle').attr('cx', lx).attr('cy', ly).attr('r', 18)
+            .attr('fill', 'rgba(10,14,26,0.9)').attr('stroke', nodeColor).attr('stroke-width', 1.5);
+          lg.append('text').attr('x', lx).attr('y', ly - 2).attr('text-anchor', 'middle')
+            .attr('fill', nodeColor).attr('font-size', '.65rem').attr('font-weight', '700').text(lesson.num);
+
+          // Multi-line Adaptive Label
+          var maxChars = 5;
+          var lineHeight = 15;
+          var labelRadius = lessonRadius + 60;
+          var tx = cx + labelRadius * Math.cos(angle);
+          var ty = cy + labelRadius * Math.sin(angle);
+
+          var lines = [];
+          for (var k = 0; k < lesson.title.length; k += maxChars) {
+            lines.push(lesson.title.substring(k, k + maxChars));
+          }
+
+          var textNode = lg.append('text')
+            .attr('x', tx).attr('y', ty - (lines.length - 1) * (lineHeight / 2))
+            .attr('text-anchor', 'middle').attr('fill', '#a0c0d8').attr('font-size', '.6rem')
+            .attr('style', 'pointer-events: none;');
+
+          lines.forEach(function (line, li) {
+            textNode.append('tspan').attr('x', tx).attr('dy', li === 0 ? 0 : lineHeight).text(line);
+          });
+
+          currentLessonIndex++;
+        });
+      });
+
+      // Auto-center on load
+      svg.call(zoom.transform, d3.zoomIdentity);
+    }
+
+    // ════════════════════════════════════════
+    //  MINDMAP
+    // ════════════════════════════════════════
+    var mindmapBuilt = {};
+
+    function buildMindmap(mod, highlightId) {
+      var svgId = mod.id + '-svg';
+      var container = document.getElementById('page-' + mod.page).querySelector('.mindmap-svg-wrap');
+      var W = container.offsetWidth || 900;
+      var H = container.offsetHeight || 600;
+
+      if (mindmapBuilt[mod.id]) {
+        // Just highlight if needed
+        if (highlightId) highlightLesson(mod.id, highlightId);
+        return;
+      }
+      mindmapBuilt[mod.id] = true;
+
+      var svg = d3.select('#' + svgId).attr('viewBox', '0 0 ' + W + ' ' + H);
+      var g = svg.append('g');
+
+      // zoom
+      svg.call(d3.zoom().scaleExtent([0.4, 3]).on('zoom', function (event) { g.attr('transform', event.transform); }));
+
+      var cx = W / 2, cy = H / 2;
+      var numLessons = mod.lessons.length;
+
+      // Stars
+      d3.range(80).forEach(function () {
+        svg.append('circle').attr('cx', Math.random() * W).attr('cy', Math.random() * H)
+          .attr('r', Math.random() * 1.2 + 0.2).attr('fill', '#fff').attr('opacity', Math.random() * 0.3 + 0.05);
+      });
+
+      // Center
+      g.append('circle').attr('cx', cx).attr('cy', cy).attr('r', 75)
+        .attr('fill', mod.dark).attr('stroke', mod.color).attr('stroke-width', 2.5);
+      g.append('text').attr('x', cx).attr('y', cy - 8).attr('text-anchor', 'middle')
+        .attr('fill', mod.color).attr('font-size', '.9rem').attr('font-weight', '700').text(mod.title);
+      g.append('text').attr('x', cx).attr('y', cy + 10).attr('text-anchor', 'middle')
+        .attr('fill', '#80b8d0').attr('font-size', '.7rem').text(mod.subtitle.substring(0, 8));
+
+      // Arrange lessons in a circle
+      var radius = Math.min(W, H) * 0.33;
+      mod.lessons.forEach(function (lesson, i) {
+        var angle = (i / numLessons) * 2 * Math.PI - Math.PI / 2;
+        var lx = cx + radius * Math.cos(angle);
+        var ly = cy + radius * Math.sin(angle);
+        var nodeColor = lesson.type === 'maint' ? '#ff8c00' : mod.color;
+
+        // Line
+        g.append('line').attr('x1', cx).attr('y1', cy).attr('x2', lx).attr('y2', ly)
+          .attr('stroke', nodeColor).attr('stroke-width', 1.5).attr('stroke-dasharray', lesson.type === 'maint' ? '4,3' : 'none').attr('opacity', .4);
+
+        var ng = g.append('g').attr('class', 'lesson-mm-node').attr('id', 'mm-' + lesson.id)
+          .attr('cursor', 'pointer')
+          .on('click', function () { toggleDetails(mod, lesson, lx, ly, g, nodeColor); })
+          .on('mouseover', function (evt) {
+            var pts = lesson.points.map(function (p) { return '• ' + p; }).join('<br>');
+            showTip(evt, '<strong>' + lesson.num + '. ' + lesson.title + '</strong><br>' + pts);
+          })
+          .on('mousemove', moveTip).on('mouseout', hideTip);
+
+        ng.append('circle').attr('cx', lx).attr('cy', ly).attr('r', 50)
+          .attr('fill', 'rgba(5,10,22,0.9)').attr('stroke', nodeColor).attr('stroke-width', 2)
+          .attr('id', 'circle-' + lesson.id);
+
+        // Type icon
+        var icon = lesson.type === 'video' ? '▶' : lesson.type === 'maint' ? '🔧' : '📄';
+        ng.append('text').attr('x', lx).attr('y', ly - 8).attr('text-anchor', 'middle')
+          .attr('font-size', '.75rem').attr('fill', nodeColor).text(lesson.num + ' ' + icon);
+
+        // Wrap title
+        var words = lesson.title.split('');
+        var line1 = words.slice(0, 6).join('');
+        var line2 = words.slice(6, 12).join('');
+        ng.append('text').attr('x', lx).attr('y', ly + 6).attr('text-anchor', 'middle')
+          .attr('fill', '#d0e8f8').attr('font-size', '.62rem').text(line1);
+        if (line2) ng.append('text').attr('x', lx).attr('y', ly + 17).attr('text-anchor', 'middle')
+          .attr('fill', '#d0e8f8').attr('font-size', '.62rem').text(line2);
+      });
+
+      if (highlightId) highlightLesson(mod.id, highlightId);
+    }
+
+    var openDetail = null;
+
+    function toggleDetails(mod, lesson, lx, ly, g, nodeColor) {
+      // Remove existing detail
+      g.selectAll('.detail-group').remove();
+      if (openDetail === lesson.id) { openDetail = null; return; }
+      openDetail = lesson.id;
+
+      var dg = g.append('g').attr('class', 'detail-group');
+      var bw = 220, bh = lesson.points.length * 22 + 50;
+      var bx = lx + 35, by = ly - bh / 2;
+
+      dg.append('rect').attr('x', bx).attr('y', by).attr('width', bw).attr('height', bh)
+        .attr('rx', 8).attr('fill', 'rgba(5,10,30,0.95)').attr('stroke', nodeColor).attr('stroke-width', 1.5);
+      dg.append('text').attr('x', bx + 12).attr('y', by + 20)
+        .attr('fill', nodeColor).attr('font-size', '.8rem').attr('font-weight', '700')
+        .text(lesson.num + ' ' + lesson.title.substring(0, 14));
+
+      lesson.points.forEach(function (pt, pi) {
+        dg.append('text').attr('x', bx + 14).attr('y', by + 40 + pi * 22)
+          .attr('fill', '#c0daf0').attr('font-size', '.68rem').text('• ' + pt.substring(0, 22));
+      });
+
+      if (lesson.url) {
+        dg.append('text').attr('x', bx + 12).attr('y', by + bh - 8)
+          .attr('fill', '#40b8ff').attr('font-size', '.65rem').attr('cursor', 'pointer')
+          .text('→ 前往課程頁面')
+          .on('click', function () { window.open(lesson.url, '_blank'); });
+      }
+    }
+
+    function highlightLesson(modId, lessonId) {
+      d3.select('#circle-' + lessonId).attr('stroke', '#ffff00').attr('stroke-width', 4);
+    }
+
+    // ════════════════════════════════════════
+    //  DOWNLOAD
+    // ════════════════════════════════════════
+    function downloadHTML() {
+      var html = document.documentElement.outerHTML;
+      var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = 'ecsoga-roadmap.html';
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // ════════════════════════════════════════
+    //  INIT
+    // ════════════════════════════════════════
+    window.addEventListener('load', function () {
+      buildRoadmap();
+    });
+    window.addEventListener('resize', function () {
+      d3.select('#roadmap-svg').selectAll('*').remove();
+      buildRoadmap();
+    });
+  </script>
+</body>
+
+</html>
