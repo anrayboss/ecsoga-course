@@ -400,127 +400,88 @@
     //  DATA
     // ════════════════════════════════════════
     var courseData = {
-      modules: [
-        {
-          id: "m02",
-          title: "02 課程暖身",
-          subtitle: "電商基礎建立",
-          color: "#00c8a0",
-          dark: "#005840",
-          page: "m02",
-          lessons: [
-            {
-              id: "m02-01", num: "01", title: "自架平台與電商平台的差異", type: "video", url: "https://course.ecsoga.com/shield/m02/01-自架平台與電商平台的差異/",
-              points: ["比較自架平台與電商平台的優缺點", "可自由選擇官網出發方式", "自架平台：完全掌控品牌，需自帶流量", "電商平台：流量現成，但抽成高、規則多"]
-            },
-            {
-              id: "m02-02", num: "02", title: "沒有自己的產品怎麼辦", type: "text", url: "https://course.ecsoga.com/shield/m02/沒有自己的產品怎麼辦/",
-              points: ["微商/直銷：話術備齊，適合練手", "聯盟行銷：選品平台，需社群+SEO基礎", "1688進貨：批發價取得，蝦皮主流來源", "代理產品：展覽選品，需本金+最低叫貨量", "OEM：貼自有品牌，一次性交易、銀貨兩訖"]
-            },
-            {
-              id: "m02-03", num: "03", title: "市場建議指南", type: "maint", url: "",
-              points: ["如何切入適合自己投入的市場", "目前頁面維護中，請直接前往課程平台觀看"]
-            },
-            {
-              id: "m02-04", num: "04", title: "如何偷窺目標市場廣告", type: "maint", url: "",
-              points: ["使用工具分析市場、選擇爆款產品", "目前頁面維護中，請直接前往課程平台觀看"]
-            },
-            {
-              id: "m02-05", num: "05", title: "偷窺競品流量的方法", type: "maint", url: "",
-              points: ["使用網站分析工具找出競品流量來源", "分析競品受眾與流量管道", "目前頁面維護中，請直接前往課程平台觀看"]
-            },
-            {
-              id: "m02-06", num: "06", title: "三種產品定位", type: "video", url: "https://course.ecsoga.com/shield/m02/三種產品定位/",
-              points: ["3種產品定位完整佈局產品線", "測試選品流程初步認知", "引流款：吸引新客，薄利多銷", "主打款：核心產品，穩定獲利", "利潤款：高客單，深度服務"]
-            }
-          ]
-        },
-        {
-          id: "m03",
-          title: "03 電商店舖",
-          subtitle: "各別做法",
-          color: "#ff6b6b",
-          dark: "#7a1010",
-          page: "m03",
-          lessons: [
-            {
-              id: "m03-01", num: "01", title: "選品店定義", type: "video", url: "https://course.ecsoga.com/shield/m03/01-選品店定義/",
-              points: ["新手電商從選品店開始", "測試並找到適合受眾後再做延伸", "快速驗證市場反應", "低風險、低門檻的入門方式"]
-            },
-            {
-              id: "m03-02", num: "02", title: "選品管道與方法", type: "video", url: "https://course.ecsoga.com/shield/m03/02-2/",
-              points: ["三個選品管道：蝦皮趨勢/速賣通/1688", "如何選品、測品及銷售", "選品測試流程", "數據驅動選品決策"]
-            },
-            {
-              id: "m03-03", num: "03", title: "貨款支付與集運", type: "text", url: "https://course.ecsoga.com/shield/m03/03acs/",
-              points: ["無支付寶可用第三方代付（折扣碼：Zobk7ldw）", "集運：將貨品集中後配送到所在地區", "降低跨境物流成本", "合理規劃物流時程"]
-            },
-            {
-              id: "m03-04", num: "04", title: "如何做一件代發", type: "video", url: "https://course.ecsoga.com/shield/m03/04ac/",
-              points: ["顧客下單 → 直接轉單給廠商", "廠商出貨，你只負責行銷", "零庫存創業模式", "核心：找到可靠的代發廠商"]
-            },
-            {
-              id: "m03-05", num: "05", title: "歐美代發工具１", type: "text", url: "https://course.ecsoga.com/shield/m03/05aceq/",
-              points: ["工具可自動鋪貨、自動上架", "需搭配 Chrome 輔助插件", "歐美選品站資源", "AliDropship 建議使用自家主機"]
-            },
-            {
-              id: "m03-06", num: "06", title: "歐美代發工具２", type: "text", url: "https://course.ecsoga.com/shield/m03/06ace/",
-              points: ["另一款歐美市場自動鋪貨工具", "自動上架到電商平台", "擴展歐美市場的進階工具"]
-            },
-            {
-              id: "m03-07", num: "07", title: "品牌店定義", type: "video", url: "https://course.ecsoga.com/shield/m03/013-2/",
-              points: ["品牌店的定義及執行方法", "從選品店升級到品牌店", "建立自有品牌識別", "長期競爭力的核心"]
-            },
-            {
-              id: "m03-08", num: "08", title: "大型平台店做法", type: "video", url: "https://course.ecsoga.com/shield/m03/100-2/",
-              points: ["大型平台店定義及執行方法", "蝦皮/Shopee/Amazon等大平台", "利用平台流量快速起步", "平台規則與演算法優化"]
-            }
-          ]
-        },
-        {
-          id: "m031",
-          title: "虛擬產品",
-          subtitle: "如何靠虛擬產品做電商",
-          color: "#b06aff",
-          dark: "#3a1070",
-          page: "m031",
-          lessons: [
-            {
-              id: "v01", num: "01", title: "如何透過虛擬產品做電商", type: "video", url: "https://course.ecsoga.com/shield/03-1/01-2/",
-              points: ["虛擬產品：服務、課程、設計模板、電子書", "無形產品與有形產品本質相同", "低成本、高利潤的創業模式"]
-            },
-            {
-              id: "v02", num: "02", title: "虛擬產品四大類型", type: "video", url: "",
-              points: ["服務類：技能販賣、諮詢顧問", "課程類：線上教學、知識變現", "設計模板：Canva/PPT模板", "電子書：電子書籍、操作手冊"]
-            },
-            {
-              id: "v03", num: "03", title: "虛擬產品的優點", type: "video", url: "",
-              points: ["邊際成本趨近零（賣出1個或100個成本相同）", "不需庫存、不需物流", "隨時隨地銷售，被動收入", "產品可無限複製"]
-            },
-            {
-              id: "v05", num: "05", title: "定價策略", type: "video", url: "",
-              points: ["4個價格梯度佈局", "引流款：$0-$97（低門檻體驗）", "核心款：$197-$497（主要收入）", "VIP款：$997+（高端服務）", "加值款：週期性收費（會員制）"]
-            },
-            {
-              id: "v06", num: "06", title: "定價策略：流量款→利潤款", type: "video", url: "",
-              points: ["流量款吸客 → 核心產品轉化 → VIP升級", "漏斗式銷售模型", "提高客戶終身價值（LTV）", "後端利潤才是重點"]
-            },
-            {
-              id: "v07", num: "07", title: "如何開始製作自己的產品", type: "video", url: "",
-              points: ["先從自己擅長的領域出發", "最小可行產品（MVP）概念", "用免費內容驗證市場反應", "從小規模開始，持續優化"]
-            },
-            {
-              id: "v08", num: "08", title: "內容就可以這樣做", type: "video", url: "",
-              points: ["6單元課程結構設計", "引言 → 基礎 → 進階 → 實戰 → 案例 → 總結", "VIP完整版：加入1對1輔導", "用教學內容建立專家形象"]
-            },
-            {
-              id: "v09", num: "09", title: "無形產品與有型產品本質相同", type: "video", url: "",
-              points: ["選品、定價、行銷邏輯完全相通", "都需要：找受眾、解決痛點", "都需要：測試市場、優化產品", "心態轉變：把知識當商品經營"]
-            }
-          ]
-        }
+  modules: [
+    {
+      id: "m02", title: "02 課程暖身", subtitle: "電商基礎建立",
+      color: "#00c8a0", dark: "#005840", page: "m02",
+      lessons: [
+        { id:"m02-01", num:"01", title:"自架平台與電商平台的差異", type:"video",
+          url:"https://course.ecsoga.com/shield/m02/01-%e8%87%aa%e6%9e%b6%e5%b9%b3%e5%8f%b0%e8%88%87%e9%9b%bb%e5%95%86%e5%b9%b3%e5%8f%b0%e7%9a%84%e5%b7%ae%e7%95%b0/",
+          points:["比較自架平台與電商平台的優缺點","自架平台：完全掌控品牌，需自帶流量","電商平台：流量現成，但抽成高、規則多","可自由選擇合適的官網出發方式"] },
+        { id:"m02-02", num:"02", title:"沒有自己的產品怎麼辦", type:"text",
+          url:"https://course.ecsoga.com/shield/m02/%e6%b2%92%e6%9c%89%e8%87%aa%e5%b7%b1%e7%9a%84%e7%94%a2%e5%93%81%e6%80%8e%e9%ba%bc%e8%be%a6/",
+          points:["微商/直銷：話術備齊，適合無經驗者練手","聯盟行銷：選品平台，需社群+SEO基礎","1688進貨：批發價取得，蝦皮主流來源","代理產品：展覽選品，需本金+最低叫貨量","OEM：貼自有品牌，一次性交易銀貨兩訖"] },
+        { id:"m02-03", num:"03", title:"市場建議指南", type:"video",
+          url:"https://course.ecsoga.com/shield/m02/%e5%b8%82%e5%a0%b4%e5%bb%ba%e8%ad%b0%e6%8c%87%e5%8d%97/",
+          points:["影片教學：如何切入適合自己的市場","從自身興趣與專長找到利基市場","評估市場競爭度與獲利潛力","建立長期可持續的市場定位"] },
+        { id:"m02-04", num:"04", title:"偷窺目標市場廣告", type:"text",
+          url:"https://course.ecsoga.com/shield/m02/%e5%a6%82%e4%bd%95%e5%81%b7%e7%aa%ba%e7%9b%ae%e6%a8%99%e5%b8%82%e5%a0%b4%e7%9a%84%e5%bb%a3%e5%91%8a%e3%80%81%e5%88%86%e6%9e%90%e5%b8%82%e5%a0%b4/",
+          points:["FindNiche：免費會員版+Chrome插件，AliExpress商品數據圖表","綠界市場分析：免費30天，查熱賣商品/分類銷售占比/客單價","BigSpy：查FB廣告熱度，了解哪些產品在跑廣告","DropShip-Spy：TikTok熱賣產品與數據（付費）","AdSpy：進階FB廣告分析（有折扣碼 BLOGGINGECLIPSE）"] },
+        { id:"m02-05", num:"05", title:"偷窺競品流量方法", type:"text",
+          url:"https://course.ecsoga.com/shield/m02/005-2/",
+          points:["SimilarWeb：分析競品月流量、排名、關鍵字","免費版可查近一個月：跳出率、停留時間、國家分布","可查競品行銷管道占比（直接/搜尋/廣告/社群）","熱搜關鍵字及自然/付費流量分析","受眾性別年齡與興趣數據分析"] },
+        { id:"m02-06", num:"06", title:"三種產品定位", type:"video",
+          url:"https://course.ecsoga.com/shield/m02/%e4%b8%89%e7%a8%ae%e7%94%a2%e5%93%81%e5%ae%9a%e4%bd%8d/",
+          points:["3種產品定位完整佈局產品線","引流款：吸引新客，薄利多銷","主打款：核心產品，穩定獲利","利潤款：高客單，深度服務","測試選品流程初步認知"] }
       ]
-    };
+    },
+    {
+      id: "m03", title: "03 電商店舖", subtitle: "各別做法",
+      color: "#ff6b6b", dark: "#7a1010", page: "m03",
+      lessons: [
+        { id:"m03-01", num:"01", title:"選品店定義", type:"video",
+          url:"https://course.ecsoga.com/shield/m03/01-%e9%81%b8%e5%93%81%e5%ba%97%e5%ae%9a%e7%be%a9/",
+          points:["新手電商從選品店開始","測試並找到適合受眾後再做延伸","快速驗證市場反應","低風險低門檻的入門方式"] },
+        { id:"m03-02", num:"02", title:"選品管道與方法", type:"video",
+          url:"https://course.ecsoga.com/shield/m03/02-2/",
+          points:["三個選品管道：蝦皮趨勢/速賣通/1688","如何選品、測品及銷售","選品測試流程","數據驅動選品決策"] },
+        { id:"m03-03", num:"03", title:"貨款支付與集運", type:"text",
+          url:"https://course.ecsoga.com/shield/m03/03acs/",
+          points:["無支付寶可用第三方代付工具","折扣碼：Zobk7ldw","集運：貨品集中後配送到所在地區","降低跨境物流成本"] },
+        { id:"m03-04", num:"04", title:"如何做一件代發", type:"video",
+          url:"https://course.ecsoga.com/shield/m03/04ac/",
+          points:["顧客下單 → 直接轉單給廠商","廠商出貨，你只負責行銷","零庫存創業模式","核心：找到可靠的代發廠商"] },
+        { id:"m03-05", num:"05", title:"歐美代發工具１", type:"text",
+          url:"https://course.ecsoga.com/shield/m03/05aceq/",
+          points:["自動鋪貨、自動上架到電商平台","需搭配 Chrome 輔助插件","歐美選品站資源","AliDropship 建議使用自家主機"] },
+        { id:"m03-06", num:"06", title:"歐美代發工具２", type:"text",
+          url:"https://course.ecsoga.com/shield/m03/06ace/",
+          points:["另一款歐美市場自動鋪貨工具","自動上架到電商平台","擴展歐美市場的進階選擇"] },
+        { id:"m03-07", num:"07", title:"品牌店定義", type:"video",
+          url:"https://course.ecsoga.com/shield/m03/013-2/",
+          points:["品牌店的定義及執行方法","從選品店升級到品牌店","建立自有品牌識別","長期競爭力的核心"] },
+        { id:"m03-08", num:"08", title:"大型平台店做法", type:"video",
+          url:"https://course.ecsoga.com/shield/m03/100-2/",
+          points:["大型平台店定義及執行方法","蝦皮/Shopee/Amazon等大平台","利用平台流量快速起步","平台規則與演算法優化"] }
+      ]
+    },
+    {
+      id: "m031", title: "虛擬產品", subtitle: "如何靠虛擬產品做電商",
+      color: "#b06aff", dark: "#3a1070", page: "m031",
+      lessons: [
+        { id:"v01", num:"01", title:"如何透過虛擬產品做電商", type:"video",
+          url:"https://course.ecsoga.com/shield/03-1/01-2/",
+          points:["虛擬產品：服務、課程、設計模板、電子書","無形產品與有形產品本質相同","低成本、高利潤的創業模式"] },
+        { id:"v02", num:"02", title:"虛擬產品四大類型", type:"video", url:"",
+          points:["服務類：技能販賣、諮詢顧問","課程類：線上教學、知識變現","設計模板：Canva/PPT模板","電子書：電子書籍、操作手冊"] },
+        { id:"v03", num:"03", title:"虛擬產品的優點", type:"video", url:"",
+          points:["邊際成本趨近零（賣1個或100個成本相同）","不需庫存、不需物流","隨時隨地銷售，被動收入","產品可無限複製"] },
+        { id:"v04", num:"04", title:"虛擬產品的缺點", type:"video", url:"",
+          points:["需建立信任感和個人品牌","初期流量獲取較困難","容易被複製或盜版","需持續更新內容維持價值"] },
+        { id:"v05", num:"05", title:"定價策略", type:"video", url:"",
+          points:["4個價格梯度佈局","引流款：$0-$97（低門檻體驗）","核心款：$197-$497（主要收入）","VIP款：$997+（高端服務）"] },
+        { id:"v06", num:"06", title:"定價：流量款→利潤款", type:"video", url:"",
+          points:["流量款吸客 → 核心產品轉化 → VIP升級","漏斗式銷售模型","提高客戶終身價值（LTV）","後端利潤才是重點"] },
+        { id:"v07", num:"07", title:"如何開始製作產品", type:"video", url:"",
+          points:["從自己擅長的領域出發","最小可行產品（MVP）概念","用免費內容驗證市場反應","從小規模開始持續優化"] },
+        { id:"v08", num:"08", title:"內容就可以這樣做", type:"video", url:"",
+          points:["6單元課程結構設計","引言→基礎→進階→實戰→案例→總結","VIP完整版：加入1對1輔導","用教學內容建立專家形象"] },
+        { id:"v09", num:"09", title:"無形產品與有形產品", type:"video", url:"",
+          points:["選品、定價、行銷邏輯完全相通","都需要：找受眾、解決痛點","都需要：測試市場、優化產品","把知識當商品經營的心態"] }
+      ]
+    }
+  ]
+};
 
     // ════════════════════════════════════════
     //  PAGE SWITCHING
